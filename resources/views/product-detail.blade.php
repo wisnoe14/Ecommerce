@@ -92,76 +92,61 @@
 </head>
 <body>
 
-<nav class="navbar navbar-dark bg-dark mb-5">
+
+{{-- Navbar Dinamis --}}
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark shadow-sm sticky-top">
     <div class="container">
-        <a class="navbar-brand" href="/">TokoParfum</a>
+        <a class="navbar-brand" href="{{ url('/') }}">TokoParfum</a>
+        <button class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ms-auto">
+                @auth
+                    <li class="nav-item">
+                        <a href="#" class="nav-link">{{ ucwords(Auth::user()->name) }}</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="{{ route('logout') }}" class="nav-link"
+                           onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                            Logout
+                        </a>
+                    </li>
+                    <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
+                        @csrf
+                    </form>
+                @else
+                    <li class="nav-item">
+                        <a href="{{ route('login') }}" class="nav-link">Login</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="{{ route('register') }}" class="nav-link">Register</a>
+                    </li>
+                @endauth
+            </ul>
+        </div>
     </div>
 </nav>
 
-<div class="container">
-    @php
-        // TAMBAHAN: Menambahkan info harga dan notes aroma
-        $produk = [
-            'essence-of-sun' => [
-                'judul' => 'Essence of Sun',
-                'gambar' => 'images/eos.jpg',
-                'harga' => 385000,
-                'deskripsi' => 'Solar accord pada parfum memberikan kesan radiant & hangat, seolah menangkap esensi matahari terbenam di pesisir tropis.',
-                'notes' => ['Top' => 'Bergamot, Coriander, Pink Pepper', 'Middle' => 'Jasmine, Rose, Tiare Flower', 'Base' => 'Vanilla, Amber, Musk'],
-            ],
-            'darker-shade-of-orgasm' => [
-                'judul' => 'Darker Shade of Orgasm',
-                'gambar' => 'images/dsoo.jpg',
-                'harga' => 415000,
-                'deskripsi' => 'Lebih smoky dan intens dibanding versi original. Aroma Orange Blossom, Apple, dan Pepper di top note-nya membuat parfum ini sangat sensual dan misterius.',
-                'notes' => ['Top' => 'Orange Blossom, Apple, Pepper', 'Middle' => 'Jasmine, Cedarwood', 'Base' => 'Patchouli, Coffee, Vanilla'],
-            ],
-            'unrosed' => [
-                'judul' => 'Unrosed',
-                'gambar' => 'images/unrosed.jpg',
-                'harga' => 395000,
-                'deskripsi' => 'Menggunakan teknik soliflore, membangun aroma bunga mawar dari tanaman lain seperti Palmarosa. Memberikan wangi mawar yang unik, hijau, dan tidak biasa.',
-                'notes' => ['Top' => 'Palmarosa, Lemon', 'Middle' => 'Geranium, Rose Accord', 'Base' => 'Vetiver, White Musk'],
-            ],
-        ];
-        $data = $produk[$slug] ?? null;
-    @endphp
-
-    @if($data)
+{{-- Konten Detail Produk --}}
+<div class="container py-5">
     <div class="card product-detail-card shadow-sm">
         <div class="row g-0">
             <div class="col-md-5">
-                <img src="{{ asset($data['gambar']) }}" alt="{{ $data['judul'] }}" class="product-image">
+                <img src="{{ asset('storage/' . $product->image) }}" alt="{{ $product->name }}" class="img-fluid w-100">
             </div>
             <div class="col-md-7">
                 <div class="card-body p-4 p-md-5">
-                    <h1 class="product-title">{{ $data['judul'] }}</h1>
-                    
-                    <div class="product-price">Rp {{ number_format($data['harga'], 0, ',', '.') }}</div>
-                    
-                    <p class="text-muted">{{ $data['deskripsi'] }}</p>
+                    <h1>{{ $product->name }}</h1>
+                    <div class="product-price">Rp {{ number_format($product->price, 0, ',', '.') }}</div>
+                    <p class="mt-3">{{ $product->description }}</p>
 
-                    <div class="scent-notes">
-                        <h5 class="mb-3" style="font-weight: 600;">Komposisi Aroma:</h5>
-                        <div>
-                            <span class="badge bg-light text-dark me-2">Top</span> {{ $data['notes']['Top'] }}
-                        </div>
-                        <div class="my-2">
-                            <span class="badge bg-light text-dark me-2">Middle</span> {{ $data['notes']['Middle'] }}
-                        </div>
-                        <div>
-                            <span class="badge bg-light text-dark me-2">Base</span> {{ $data['notes']['Base'] }}
-                        </div>
-                    </div>
-
-                    <hr class="my-4">
-
-                    <div class="d-flex align-items-center">
-                        <button class="btn btn-buy btn-lg flex-grow-1">
+                    <div class="d-flex mt-4">
+                        <button class="btn btn-dark btn-lg flex-grow-1">
                             <i class="fas fa-shopping-cart me-2"></i> Beli Sekarang
                         </button>
-                        <a href="/" class="btn btn-outline-secondary ms-3" title="Kembali">
-                            <i class="fas fa-arrow-left"></i>
+                        <a href="{{ url('/') }}" class="btn btn-outline-secondary ms-3" title="Kembali">
+                            <i class="fas fa-arrow-left"></i> Kembali
                         </a>
                     </div>
 
@@ -169,14 +154,6 @@
             </div>
         </div>
     </div>
-    @else
-        <div class="alert alert-danger text-center">
-            Produk tidak ditemukan.
-        </div>
-        <div class="text-center">
-            <a href="/" class="btn btn-dark">Kembali ke Beranda</a>
-        </div>
-    @endif
 </div>
 
 <footer class="text-center py-4 mt-5">

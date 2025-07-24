@@ -19,12 +19,12 @@ class HomeController extends Controller
 
     $products = $query->latest()->paginate(9);
 
-    return view('user.products.index', compact('products'));
+    return view('landing', compact('products'));
 }
 
     public function show($id)
     {
         $product = Product::findOrFail($id);
-        return view('user.products.show', compact('product'));
+        return view('product-detail', compact('product'));
     }
 }

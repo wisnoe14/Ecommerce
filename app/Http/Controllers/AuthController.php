@@ -32,7 +32,7 @@ class AuthController extends Controller
 
             // Arahkan berdasarkan role
             if ($user->role === 'admin') {
-                return redirect('/admin/index');
+                return redirect('/admin/products')->with('success', 'Login berhasil sebagai admin.');
             } else {
                 return redirect('/');
             }
@@ -47,7 +47,7 @@ class AuthController extends Controller
             'name' => 'required',
             'email' => 'required|email|unique:users',
             'password' => 'required|confirmed|min:6',
-            'role' => 'required|in:user,admin', // pastikan valid
+            'password_confirmation' => 'required|min:6'
         ]);
 
         $validated['password'] = Hash::make($validated['password']);
