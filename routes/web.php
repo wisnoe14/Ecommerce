@@ -21,10 +21,11 @@ Route::get('/produk/{slug}', function ($slug) {
     return view('product-detail', ['slug' => $slug]);
 })->name('produk.detail');
 
-Route::middleware('auth')->group(function () {
-    Route::resource('/admin/products', \App\Http\Controllers\ProductController::class);
+
+    
+Route::prefix('admin')->name('admin.')->group(function () {
+    Route::resource('products', ProductController::class);
 });
-Route::resource('/admin/products', ProductController::class)->middleware('auth');
 
 use App\Http\Controllers\AccountController;
 

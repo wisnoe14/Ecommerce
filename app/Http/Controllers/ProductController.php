@@ -23,7 +23,7 @@ public function index()
      */
     public function create()
     {
-        //
+        return view('admin.products.create');
     }
 
     /**
@@ -86,6 +86,10 @@ public function update(Request $request, $id)
     $product->description = $request->description;
 
     if ($request->hasFile('image')) {
+        // Hapus gambar lama jika ada
+        if ($product->image && \Storage::disk('public')->exists($product->image)) {
+            \Storage::disk('public')->delete($product->image);
+        }
         $product->image = $request->file('image')->store('products', 'public');
     }
 
