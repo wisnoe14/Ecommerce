@@ -3,8 +3,12 @@
 @section('title', 'Edit Produk')
 
 @section('content')
-<div class="container">
+<div class="container mt-4">
     <h3 class="mb-4">Edit Produk</h3>
+
+    @if (session('success'))
+        <div class="alert alert-success">{{ session('success') }}</div>
+    @endif
 
     @if ($errors->any())
         <div class="alert alert-danger">
@@ -37,16 +41,20 @@
         </div>
 
         <div class="mb-3">
-            <label for="image" class="form-label">Gambar (biarkan kosong jika tidak diganti)</label>
+            <label for="image" class="form-label">Gambar (biarkan kosong jika tidak ingin mengganti)</label>
             <input type="file" name="image" class="form-control">
             @if ($product->image)
-                <small class="text-muted d-block mt-2">Gambar saat ini:</small>
-                <img src="{{ asset('storage/' . $product->image) }}" width="100" class="mt-1">
+                <div class="mt-2">
+                    <small class="text-muted">Gambar saat ini:</small><br>
+                    <img src="{{ asset('storage/' . $product->image) }}" alt="Gambar Produk" width="120" class="border rounded">
+                </div>
             @endif
         </div>
 
-        <button type="submit" class="btn btn-success">Simpan Perubahan</button>
-        <a href="{{ route('admin.products.index') }}" class="btn btn-secondary">Batal</a>
+        <div class="d-flex gap-2">
+            <button type="submit" class="btn btn-success">Simpan Perubahan</button>
+            <a href="{{ route('admin.products.index') }}" class="btn btn-secondary">Batal</a>
+        </div>
     </form>
 </div>
 @endsection

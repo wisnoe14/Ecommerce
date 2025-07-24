@@ -3,11 +3,15 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\HomeController;
 
-// Hanya satu route untuk '/'
-Route::get('/', function () {
-    return view('landing'); // ganti sesuai kebutuhan
-});
+// Halaman utama untuk user
+Route::get('/', [HomeController::class, 'index'])->name('home');
+
+
+// Halaman detail produk untuk user
+Route::get('/produk/{id}', [HomeController::class, 'show'])->name('produk.detail');
+
 
 // Login Routes
 Route::get('/login', [AuthController::class, 'loginForm'])->name('login');

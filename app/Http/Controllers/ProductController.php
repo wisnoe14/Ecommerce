@@ -103,6 +103,15 @@ public function update(Request $request, $id)
      */
     public function destroy(string $id)
     {
-        //
+        $product = Product::findOrFail($id);
+
+        // Hapus gambar jika ada
+        if ($product->image && \Storage::disk('public')->exists($product->image)) {
+            \Storage::disk('public')->delete($product->image);
+        }
+
+        $product->delete();
+
+        return redirect()->route('admin.products.index')->with('success', 'Produk berhasil dihapus.');
     }
 }
